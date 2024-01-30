@@ -16,11 +16,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/config/{file}", ([FromRoute] string file ) =>
-{
-
-    return new {file};
-})
+app.MapGet("/configs/{file}", ([FromRoute] string file) =>
+    {
+        if (!File.Exists(Path.Combine("configs", file)))
+            return Results.NotFound();
+        else
+        {
+            return Results.Stream(new FileStream(Path.Combine("configs", file), FileMode.Open));
+        }
+    })
 .WithName("GetWeatherForecast");
 
 app.Run();
