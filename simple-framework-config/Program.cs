@@ -1,30 +1,33 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+const string configFolderEnvVarName = "CONFIG_COLLECTION_FOLDER";
 
-app.MapGet("/configs/{file}", ([FromRoute] string file) =>
+var configFolderPath = Environment.GetEnvironmentVariable(configFolderEnvVarName) ?? "configs";
+
+if (!Directory.Exists(configFolderPath)) throw new ApplicationException($"path '{configFolderPath}' to the configs folder provided with env variable {configFolderEnvVarName} is not exists");
+
+app.MapGet("/config-file/{file}",
+    ([FromRoute] string file) =>
+        ConfigFileNotExists(file)
+            ? Results.NotFound()
+            : Results.Stream(File.OpenRead(GetFilePath(file)), fileDownloadName: file));
+
+app.MapGet("/config-json/{file}",
+    async ([FromRoute] string file, CancellationToken token) =>
     {
-        if (!File.Exists(Path.Combine("configs", file)))
-            return Results.NotFound();
-        else
-        {
-            return Results.Stream(new FileStream(Path.Combine("configs", file), FileMode.Open));
-        }
-    })
-.WithName("GetWeatherForecast");
+        if (ConfigFileNotExists(file)) return Results.NotFound();
+        
+        await using var readStream = File.OpenRead(GetFilePath(file));
+        var result = await JsonSerializer.DeserializeAsync<object>(readStream, options:null, token);
+        return Results.Json(result);
+    });
 
 app.Run();
+
+bool ConfigFileNotExists(string file) => !File.Exists(Path.Combine(configFolderPath, file));
+string GetFilePath(string file) => Path.Combine(configFolderPath, file);
+
