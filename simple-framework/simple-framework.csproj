@@ -9,4 +9,7 @@
  <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
+ <ItemGroup>
+   <PackageReference Include="zipkin4net" Version="1.5.0" />
+ </ItemGroup>
 </Project>

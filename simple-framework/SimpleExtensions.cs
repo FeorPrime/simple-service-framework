@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using zipkin4net;
+using zipkin4net.Tracers.Zipkin;
 
 namespace simple_framework;
 public static class SimpleExtensions
@@ -40,5 +42,55 @@ public static class SimpleExtensions
 
         Console.WriteLine("check");
         return builder;
+    }
+
+    /// <summary>
+    /// Добавляет в DI ZIPKIN
+    /// 
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    public static WebApplicationBuilder UseSimpleDefaults(this WebApplicationBuilder builder){
+        return builder;
+    }
+    
+    //напиши метод добавления ZIPKIN в DI
+    /// <summary>AddZipkin</summary>
+    /// <param name="builder"></param>
+    public static WebApplicationBuilder AddZipkin(this WebApplicationBuilder builder){
+        
+        
+        var logger = CreateLogger(); //It should implement ILogger
+        var sender = CreateHttpTransport(); // It should implement IZipkinSender
+        var spanSerializer = CreateSpanSerializer();
+
+        TraceManager.SamplingRate = 1.0f; //full tracing
+
+        var tracer = new ZipkinTracer(sender, spanSerializer);
+        TraceManager.RegisterTracer(tracer);
+        TraceManager.Start(logger);
+
+        //Run your application
+
+        //On shutdown
+        TraceManager.Stop();
+        
+        
+            return builder;
+        }
+
+    private static ISpanSerializer CreateSpanSerializer()
+    {
+        throw new NotImplementedException();
+    }
+
+    private static IZipkinSender CreateHttpTransport()
+    {
+        throw new NotImplementedException();
+    }
+
+    private static ILogger CreateLogger()
+    {
+        throw new NotImplementedException();
     }
 }

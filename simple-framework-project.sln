@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simple-framework-config", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simple-framework", "simple-framework\simple-framework.csproj", "{064E8EF1-C16F-430C-B551-B536ED003DA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simple-framework-tests", "simple-framework-tests\simple-framework-tests.csproj", "{7A37166B-CB87-4617-BB13-12537C7F0C3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{064E8EF1-C16F-430C-B551-B536ED003DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{064E8EF1-C16F-430C-B551-B536ED003DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{064E8EF1-C16F-430C-B551-B536ED003DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A37166B-CB87-4617-BB13-12537C7F0C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A37166B-CB87-4617-BB13-12537C7F0C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A37166B-CB87-4617-BB13-12537C7F0C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A37166B-CB87-4617-BB13-12537C7F0C3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
